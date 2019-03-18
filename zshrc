@@ -130,7 +130,7 @@ function virtualenv_prompt_info(){
 }
 
 # disables prompt mangling in virtual_env/bin/activate
-export VIRTUAL_ENV_DISABLE_PROMPT=0
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 
 . ~/.miniconda3/etc/profile.d/conda.sh

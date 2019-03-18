@@ -21,6 +21,7 @@
     ~/.tmux.conf:
     ~/.config/nvim/init.vim:
     ~/.zshrc:
+    ~/.zshenv:
     ~/.alias:
 
 - shell:

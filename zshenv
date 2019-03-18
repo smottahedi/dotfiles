@@ -35,8 +35,8 @@ if [ "$(hostname)" "==" "mfc-XPS" ] ; then
       export WORKON_HOME=$HOME/.virtualenvs
       export PROJECT_HOME=$HOME/Projects
       source /usr/local/bin/virtualenvwrapper.sh
-      source $HOME/.virtualenvs/py3.5/bin/activate
-      source $HOME/.virtualenvs/py3.5/lib/python3.5/site-packages/powerline/bindings/zsh/powerline.zsh
+      #source $HOME/.virtualenvs/py3.5/bin/activate
+      #source $HOME/.virtualenvs/py3.5/lib/python3.5/site-packages/powerline/bindings/zsh/powerline.zsh
       export LD_LIBRARY_PATH=/usr/lib/
       #export ENERGYPLUS_PATH=/home/mfc/.config/EnergyPlus-8-7-0
       #export PATH=$PATH:ENERGYPLUS_PATH
@@ -57,9 +57,9 @@ if [ "$(hostname)" "==" "mfc-XPS" ] ; then
       export PATH=$HOME/.config/idea/bin/:$PATH
       export PATH=$PATH:/home/mfc/.config/cling/bin/
       # Anaconda
-      export PATH=$PATH:/home/mfc/miniconda3/bin/
+      export PATH=$PATH:/home/mfc/.miniconda3/bin/
       #Pytorch
-      export CMAKE_PREFIX_PATH=/home/mfc/miniconda3/
+      export CMAKE_PREFIX_PATH=/home/mfc/.miniconda3/
       # bcvtb
       export BCVTB_HOME=/home/mfc/.config/bcvtb
       export BCVTB_JNI_DIR=/usr/bin/java/include

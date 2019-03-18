@@ -73,7 +73,7 @@ Plug 'vim-scripts/indentpython.vim'
 "Plug 'w0rp/ale'
 
 " slow
-" Plug 'scrooloose/syntastic'
+Plug 'scrooloose/syntastic'
 " Plug 'airblade/vim-gitgutter'
 " Yank history navigation
 " Plug 'vim-scripts/YankRing.vim'
@@ -221,12 +221,6 @@ endif
 " Vim settings and mappings
 " You can edit them as you wish
 
-" " tabs and spaces handling
-set expandtab
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-
 " show line numbers
 set nu
 
@@ -255,6 +249,10 @@ set wildmode=list:longest
 
 " save as sudo
 "ca w!! w !sudo tee "%"
+
+" System Clipboard
+set clipboard=unnamed
+
 
 " " tab navigation mappings
 map tt :tabnew
@@ -449,6 +447,11 @@ endif
 "----------------MINE--------------------------"
 filetype plugin indent on    " enables filetype detection
 let g:SimpylFold_docstring_preview = 1
+"Folding based on indentation:
+"autocmd FileType python set foldmethod=indent
+"use space to open folds
+nnoremap <space> za
+
 
 "pydiction path
 let g:pydiction_location = '/home/mfc/.config/nvim/plugged/Pydiction'
@@ -510,9 +513,9 @@ map <Leader>m <esc>:tabnext<CR>
 au BufRead,BufNewFile *py,*pyw,*.c,*.h set tabstop=4
 
 "spaces for indents
-au BufRead,BufNewFile *.py,*pyw set shiftwidth=4
-au BufRead,BufNewFile *.py,*.pyw set expandtab
-au BufRead,BufNewFile *.py set softtabstop=4
+"au BufRead,BufNewFile *.py,*pyw set shiftwidth=4
+"au BufRead,BufNewFile *.py,*.pyw set expandtab
+"au BufRead,BufNewFile *.py set softtabstop=4
 
 " Use the below highlight group when displaying bad whitespace is desired.
 highlight BadWhitespace ctermbg=red guibg=red
@@ -523,7 +526,7 @@ au BufRead,BufNewFile *.py,*.pyw match BadWhitespace /^\t\+/
 au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
 " Wrap text after a certain number of characters
-au BufRead,BufNewFile *.py,*.pyw, set textwidth=80
+"au BufRead,BufNewFile *.py,*.pyw, set textwidth=80
 
 " Use UNIX (\n) line endings.
 au BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
@@ -536,18 +539,17 @@ let python_highlight_all=1
 syntax on
 
 " Keep indentation level from previous line:
-autocmd FileType python set autoindent
+"autocmd FileType python set autoindent
 
 
 " make backspaces more powerfull
 set backspace=indent,eol,start
 
 
+" Flag White Spaces
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
-"Folding based on indentation:
-autocmd FileType python set foldmethod=indent
-"use space to open folds
-nnoremap <space> za
+
 
 " ----------------Pymode-----------------------
 
@@ -558,23 +560,23 @@ let g:pymode_warnings = 1
 " let g:pymode_paths = []
 let g:pymode_trim_whitespaces = 1
 let g:pymode_options = 1
-let g:pyrandintymode_options_colorcolumn = 1
-let g:pymode_quickfix_minheight = 3
+let g:pyrandintymode_options_colorcolumn = 0
+"let g:pymode_quickfix_minheight = 3
 " let g:pymode_python = 'python3'
-let g:pymode_indent = 1
-let g:pymode_folding = 1
+let g:pymode_indent = 0
+let g:pymode_folding = 0
 let g:pymode_motion = 1
 let g:pymode_doc = 1
 let g:pymode_doc_bind = 'K'
-let g:pymode_virtualenv = 1
+let g:pymode_virtualenv = 0
 " let g:pymode_virtualenv_path = $VIRTUA_ENV
 let g:pymode_run = 1
 let g:pymode_run_bind = '<leader>h'
 " let g:pymode_breakpoint = 1
  let g:pymode_breakpoint_bind = '<leader>b'
 " let g:pymode_breakpoint_cmd = ''
-let g:pymode_lint = 0
-let g:pymode_lint_on_write = 0 
+let g:pymode_lint = 1
+let g:pymode_lint_on_write = 1 
 let g:pymode_syntax = 1
 " let g:pymode_syntax_slow_sync = 1
 " let g:pymode_syntax_all = 1
@@ -636,44 +638,54 @@ aug QFClose
 aug END
 
 
+" Syntastic settings
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_python_checkers = ['pylint']
 
 
 "-------------Indent Python in the Google way--------------------------------
 
-setlocal indentexpr=GetGooglePythonIndent(v:lnum)
+"setlocal indentexpr=GetGooglePythonIndent(v:lnum)
 
-let s:maxoff = 50 " maximum number of lines to look backwards.
+"let s:maxoff = 50 " maximum number of lines to look backwards.
 
-function GetGooglePythonIndent(lnum)
+"function GetGooglePythonIndent(lnum)
 
-  " Indent inside parens.
-  " Align with the open paren unless it is at the end of the line.
-  " E.g.
-  "   open_paren_not_at_EOL(100,
-  "                         (200,
-  "                          300),
-  "                         400)
-  "   open_paren_at_EOL(
-  "       100, 200, 300, 400)
-  call cursor(a:lnum, 1)
-  let [par_line, par_col] = searchpairpos('(\|{\|\[', '', ')\|}\|\]', 'bW',
-        \ "line('.') < " . (a:lnum - s:maxoff) . " ? dummy :"
-        \ . " synIDattr(synID(line('.'), col('.'), 1), 'name')"
-        \ . " =~ '\\(Comment\\|String\\)$'")
-  if par_line > 0
-    call cursor(par_line, 1)
-    if par_col != col("$") - 1
-      return par_col
-    endif
-  endif
+  "" Indent inside parens.
+  "" Align with the open paren unless it is at the end of the line.
+  "" E.g.
+  ""   open_paren_not_at_EOL(100,
+  ""                         (200,
+  ""                          300),
+  ""                         400)
+  ""   open_paren_at_EOL(
+  ""       100, 200, 300, 400)
+  "call cursor(a:lnum, 1)
+  "let [par_line, par_col] = searchpairpos('(\|{\|\[', '', ')\|}\|\]', 'bW',
+        "\ "line('.') < " . (a:lnum - s:maxoff) . " ? dummy :"
+        "\ . " synIDattr(synID(line('.'), col('.'), 1), 'name')"
+        "\ . " =~ '\\(Comment\\|String\\)$'")
+  "if par_line > 0
+    "call cursor(par_line, 1)
+    "if par_col != col("$") - 1
+      "return par_col
+    "endif
+  "endif
 
-  " Delegate the rest to the original function.
-  return GetPythonIndent(a:lnum)
+  "" Delegate the rest to the original function.
+  "return GetPythonIndent(a:lnum)
 
-endfunction
+"endfunction
 
-let pyindent_nested_paren="&sw*2"
-let pyindent_open_paren="&sw*2"
+"let pyindent_nested_paren="&sw*2"
+"let pyindent_open_paren="&sw*2"
 
 " Moving line with j and k 
 nnoremap <A-j> :m .+1<CR>==
@@ -682,3 +694,13 @@ inoremap <A-j> <Esc>:m .+1<CR>==gi
 inoremap <A-k> <Esc>:m .-2<CR>==gi
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
+
+
+
+"-------------------------
+let g:python3_host_prog = '/home/mfc/.conda/envs/neovim3/bin/python'
+
+"------colorcolumn--------
+set colorcolumn=0
+highlight ColorColumn ctermbg=magenta
+call matchadd('ColorColumn', '\%81v', 80)

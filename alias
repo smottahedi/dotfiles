@@ -30,7 +30,8 @@ alias reloadzsh='source ~/.zshrc'
 alias pj='cd ~/Projects/'
 alias ipy="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
 alias ems='~/Projects/EMS/'
-
+alias da='conda deactivate'
+alias ca='conda activate'
 
 pdf(){
 xreader "$1" &
