@@ -238,10 +238,10 @@ else
 endif
 
 " needed so deoplete can auto select the first suggestion
-set completeopt+=noinsert
+"set completeopt+=noinsert
 " comment this line to enable autocompletion preview window
 " (displays documentation related to the selected completion option)
-set completeopt-=preview
+"set completeopt-=preview
 
 " autocompletion of files and commands behaves like shell
 " (complete only the common part, list the options that match)
@@ -271,8 +271,8 @@ nnoremap <silent> // :noh<CR>
 autocmd BufWritePre *.py :%s/\s\+$//e
 
 " fix problems with uncommon shells (fish, xonsh) and plugins running commands
-" (neomake, ...)
-" set shell=/bin/bash
+" (neomake, ...)q
+set shell=/bin/zsh
 
 " ============================================================================
 " Plugins settings and mappings
@@ -305,10 +305,10 @@ let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 " autocmd! BufWritePost * Neomake
 
 " Check code as python3 by default
-let g:neomake_python_python_maker = neomake#makers#ft#python#python()
-let g:neomake_python_flake8_maker = neomake#makers#ft#python#flake8()
-let g:neomake_python_python_maker.exe = 'python3 -m py_compile'
-let g:neomake_python_flake8_maker.exe = 'python3 -m flake8'
+"let g:neomake_python_python_maker = neomake#makers#ft#python#python()
+"let g:neomake_python_flake8_maker = neomake#makers#ft#python#flake8()
+"let g:neomake_python_python_maker.exe = 'python3 -m py_compile'
+"let g:neomake_python_flake8_maker.exe = 'python3 -m flake8'
 
 " Fzf ------------------------------
 
@@ -485,7 +485,7 @@ set smartcase
 
 
 " enable mouse
-set mouse=v
+set mouse=a
 
 "Quick quit command
 map <F4> :nohl<CR>
@@ -510,7 +510,7 @@ map <Leader>m <esc>:tabnext<CR>
 
 "------------Start Python PEP 8 stuff----------------
 " Number of spaces that a pre-existing tab is equal to.
-au BufRead,BufNewFile *py,*pyw,*.c,*.h set tabstop=4
+"au BufRead,BufNewFile *py,*pyw,*.c,*.h set tabstop=4
 
 "spaces for indents
 "au BufRead,BufNewFile *.py,*pyw set shiftwidth=4
@@ -555,12 +555,13 @@ au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
 " open docstring window at the bottom
 " set splitbelow
-let g:pymode = 1
+let g:pymode = 1 
 let g:pymode_warnings = 1
 " let g:pymode_paths = []
 let g:pymode_trim_whitespaces = 1
 let g:pymode_options = 1
-let g:pyrandintymode_options_colorcolumn = 0
+let g:pymode_options_colorcolumn = 0
+let g:pymode_options_max_line_length = 79
 "let g:pymode_quickfix_minheight = 3
 " let g:pymode_python = 'python3'
 let g:pymode_indent = 0
@@ -579,30 +580,30 @@ let g:pymode_lint = 1
 let g:pymode_lint_on_write = 1 
 let g:pymode_syntax = 1
 " let g:pymode_syntax_slow_sync = 1
-" let g:pymode_syntax_all = 1
+let g:pymode_syntax_all = 1
 let g:pymode_lint_mssage = 1
 let g:pymode_lint_checkers = ['pylint']
-" " let g:pymode_lint_todo_symbol = 'WW'
-" " let g:pymode_lint_comment_symbol = 'CC'
-" " let g:pymode_lint_visual_symbol = 'RR'
-" " let g:pymode_lint_error_symbol = 'EE'
-" " let g:pymode_lint_info_symbol = 'II'
-" " let g:pymode_lint_pyflakes_symbol = 'FF'
-" " let g:pymode_lint_unmodified = 0
-" " let g:pymode_lint_on_fly = 0
-" " let g:pymode_lint_ignore = "E501,W"
-" " let g:pymode_lint_select = "E501,W0011,W430"
-" " let g:pymode_lint_sort = []
-" " let g:pymode_lint_cwindow = 1
+let g:pymode_lint_todo_symbol = 'WW'
+let g:pymode_lint_comment_symbol = 'CC'
+let g:pymode_lint_visual_symbol = 'RR'
+let g:pymode_lint_error_symbol = 'EE'
+let g:pymode_lint_info_symbol = 'II'
+let g:pymode_lint_pyflakes_symbol = 'FF'
+let g:pymode_lint_unmodified = 0
+let g:pymode_lint_on_fly = 1
+let g:pymode_lint_ignore = "E501,W"
+let g:pymode_lint_select = "E501,W0011,W430"
+let g:pymode_lint_sort = []
+let g:pymode_lint_cwindow = 1
 let g:pymode_lint_signs = 1
-let g:pymode_rope = 0 
+let g:pymode_rope = 1 
 " let g:pymode_rope_lookup_project = 0
 " let g:pymode_rope_project_root = ""
-" let g:pymode_rope_ropefolder='.ropeproject'
+let g:pymode_rope_ropefolder='.ropeproject'
 " let g:pymode_rope_show_doc_bind = '<C-c>d'
 " let g:pymode_rope_regenerate_on_write = 0
 "let g:pymode_rope_completion = 1
-" let g:pymode_rope_complete_on_dot = 1
+"let g:pymode_rope_complete_on_dot = 1
 " let g:pymode_rope_autoimport = 1
 " let g:pymode_rope_autoimport_import_after_complete = 0
 " let g:pymode_rope_goto_definition_bind = '<C-c>g'
@@ -643,11 +644,11 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_python_checkers = ['pylint']
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_python_checkers = ['pylint']
 
 
 "-------------Indent Python in the Google way--------------------------------
@@ -701,6 +702,7 @@ vnoremap <A-k> :m '<-2<CR>gv=gv
 let g:python3_host_prog = '/home/mfc/.conda/envs/neovim3/bin/python'
 
 "------colorcolumn--------
-set colorcolumn=0
 highlight ColorColumn ctermbg=magenta
 call matchadd('ColorColumn', '\%81v', 80)
+"set colorcolumn=0
+set cc=
